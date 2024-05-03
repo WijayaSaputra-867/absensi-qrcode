@@ -68,15 +68,18 @@ class ProfileController extends Controller
     public function upload_image(Request $request)
     {
         $request->validate(['image' => 'required|image|max:5120|mimes:jpg,png,jpeg']);
+        // dd($request->file('image'));
 
         $id = Auth::user()->id;
         $user = User::find($id);
+
 
         if ($user->change_profile == false) {
             $user->change_profile = true;
         }
 
-        $user->profile = $request->File('image')->store('/uploads/profile');
+        $profile = $request->file('image')->store('/public/uploads/profile');
+        $user->profile = str_replace("public", "", $profile);
 
         $user->save();
 

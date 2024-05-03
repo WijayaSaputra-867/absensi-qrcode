@@ -30,37 +30,23 @@ export default function Authenticated({ user, header, children }) {
                                 </NavLink>
                             </div>
                             {/* User Link */}
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("users.index")}
-                                    active={
-                                        route().current("users.index") ||
-                                        route().current("users.create") ||
-                                        route().current("users.show") ||
-                                        route().current("users.edit")
-                                            ? true
-                                            : false
-                                    }
-                                >
-                                    User
-                                </NavLink>
-                            </div>
-                            {/* Employee Link */}
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("employees.index")}
-                                    active={
-                                        route().current("employees.index") ||
-                                        route().current("employees.create") ||
-                                        route().current("employees.show") ||
-                                        route().current("employees.edit")
-                                            ? true
-                                            : false
-                                    }
-                                >
-                                    Employee
-                                </NavLink>
-                            </div>
+                            {user.role == "admin" && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("users.index")}
+                                        active={
+                                            route().current("users.index") ||
+                                            route().current("users.create") ||
+                                            route().current("users.show") ||
+                                            route().current("users.edit")
+                                                ? true
+                                                : false
+                                        }
+                                    >
+                                        User
+                                    </NavLink>
+                                </div>
+                            )}
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -179,36 +165,23 @@ export default function Authenticated({ user, header, children }) {
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
-                    <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink
-                            href={route("users.index")}
-                            active={
-                                route().current("users.index") ||
-                                route().current("users.create") ||
-                                route().current("users.show") ||
-                                route().current("users.edit")
-                                    ? true
-                                    : false
-                            }
-                        >
-                            User
-                        </ResponsiveNavLink>
-                    </div>
-                    <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink
-                            href={route("employees.index")}
-                            active={
-                                route().current("employees.index") ||
-                                route().current("employees.create") ||
-                                route().current("employees.show") ||
-                                route().current("employees.edit")
-                                    ? true
-                                    : false
-                            }
-                        >
-                            Employee
-                        </ResponsiveNavLink>
-                    </div>
+                    {user.role == "admin" && (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("users.index")}
+                                active={
+                                    route().current("users.index") ||
+                                    route().current("users.create") ||
+                                    route().current("users.show") ||
+                                    route().current("users.edit")
+                                        ? true
+                                        : false
+                                }
+                            >
+                                User
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">

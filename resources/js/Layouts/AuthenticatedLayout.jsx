@@ -38,7 +38,8 @@ export default function Authenticated({ user, header, children }) {
                                             route().current("users.index") ||
                                             route().current("users.create") ||
                                             route().current("users.show") ||
-                                            route().current("users.edit")
+                                            route().current("users.edit") ||
+                                            route().current("users.search")
                                                 ? true
                                                 : false
                                         }
@@ -173,7 +174,8 @@ export default function Authenticated({ user, header, children }) {
                                     route().current("users.index") ||
                                     route().current("users.create") ||
                                     route().current("users.show") ||
-                                    route().current("users.edit")
+                                    route().current("users.edit") ||
+                                    route().current("users.search")
                                         ? true
                                         : false
                                 }

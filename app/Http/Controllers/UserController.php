@@ -26,7 +26,12 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('User/Create');
+        $user = [
+            "name" => "",
+            "email" => "",
+            "password" => "",
+        ];
+        return Inertia::render('User/Create', ['user' => $user]);
     }
 
     /**
@@ -34,22 +39,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // membuat validasi
+        // Validasi untuk data user
         $request->validate([
             'name' => 'required|string|min:5|max:100',
             'email' => 'required|string|email|unique:users,email|max:100',
             'password' => 'required|string|min:8|confirmed'
         ]);
 
-        // menambahkan data user ke dalam database
-        User::create([
+        // Memasukan ke variabel user
+        $user = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
+            'password' => $request->password,
+            'gender' => '',
+            'phone' => '',
+            'address' => '',
+            'division' => ''
+        ];
 
-        // kembalikan kehalaman user index
-        return Redirect::route('users.index');
+        // Mengirim ke Detail user
+        return Inertia::render('User/Detail/Create', [
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -109,15 +120,9 @@ class UserController extends Controller
     /**
      * Search User by name
      */
-    public function search($name)
+    public function search(string $name)
     {
-        if ($name == null) {
-            $users = User::all();
-            return Inertia::render('User/Index', [
-                'users' => $users
-            ]);
-        }
-        $users = User::where('name', 'like', "%{$name}%")->paginate(5);
+        $users = User::where('role', 'not like', 'admin')->where('name', 'like', "%{$name}%")->paginate(5);
         return Inertia::render('User/Index', [
             'users' => $users
         ]);

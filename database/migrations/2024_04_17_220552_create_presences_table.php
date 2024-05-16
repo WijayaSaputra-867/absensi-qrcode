@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('presences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id');
             $table->foreignId('user_id');
-            $table->dateTime('entry_time')->nullable();
-            $table->dateTime('break_time')->nullable();
-            $table->dateTime('home_time')->nullable();
+            $table->foreignId('shift_id');
+            $table->enum('description', ['attend', 'absent', 'permission']);
             $table->timestamps();
         });
     }

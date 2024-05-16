@@ -4,14 +4,12 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AbsenceController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PresenceController;
+use App\Http\Controllers\UserDetailController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
@@ -32,9 +30,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile', [ProfileController::class, 'upload_image'])->name('profile.upload-image');
 
     Route::resource('/users', UserController::class);
-    Route::get('/users/search/{name}', [UserController::class, 'search'])->name('users.search');
-    Route::resource('/presences', PresenceController::class);
-    Route::resource('/absences', AbsenceController::class);
+    Route::prefix('/users')->group(function () {
+        Route::get('/search/{name}', [UserController::class, 'search'])->name('users.search');
+        Route::get('/create/details/{user}', [UserDetailController::class, 'create'])->name('details.create');
+        Route::post('/create/details', [UserDetailController::class, 'store'])->name('details.store');
+    });
+
+
 });
 
 require __DIR__.'/auth.php';

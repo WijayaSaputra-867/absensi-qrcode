@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
+            $table->date('date_attended');
+            $table->time('work_time');
+            $table->time('break_time');
+            $table->time('home_time');
             $table->timestamps();
         });
     }

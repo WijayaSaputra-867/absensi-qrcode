@@ -2,22 +2,16 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserDetailController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\WelcomeController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 
-Route::get('/scan', function () {
-    return Inertia::render('Scanner');
-});
+Route::get('/admin', [AdminController::class, 'create'])->name('admin.create');
+Route::post('/admin/create', [AdminController::class, 'store'])->name('admin.store');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

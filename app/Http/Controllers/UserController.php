@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
@@ -106,7 +107,7 @@ class UserController extends Controller
             'email' => $request->email
         ]);
 
-        $detail = UserDetail::where('user_id', $user->id);
+        $detail = UserDetail::where('user_id', $user->id)->first();
 
         $detail->update([
             'gender' => $request->gender,
@@ -123,7 +124,11 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
+        if ($user->change_profile) {
+            Storage::delete($user->profile);
+        }
+        $detail = UserDetail::where('user_id', $user->id)->first();
+        $detail->delete();
         $user->delete();
 
         return Redirect::route('users.index');

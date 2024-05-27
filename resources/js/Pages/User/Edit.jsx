@@ -18,7 +18,7 @@ export default function Index({ auth }) {
                 <div className="w-full  mx-auto sm:px-6 lg:px-6 sm:mt-4 md:mt-0">
                     <div className="bg-white overflow-hidden shadow-sm rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <UserEditForm className="space-y-6 max-w-xl" />
+                            <UserEditForm />
                         </div>
                     </div>
                 </div>

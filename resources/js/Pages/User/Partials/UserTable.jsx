@@ -6,7 +6,7 @@ import { FaPenToSquare, FaPlus } from "react-icons/fa6";
 import { FaRegEye } from "react-icons/fa";
 
 export default function UserTable({ className = "" }) {
-    const users = usePage().props.users;
+    const { users } = usePage().props;
 
     return (
         <section className={className}>
@@ -35,9 +35,6 @@ export default function UserTable({ className = "" }) {
                                 Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Email
-                            </th>
-                            <th scope="col" className="px-6 py-3">
                                 Action
                             </th>
                         </tr>
@@ -49,7 +46,6 @@ export default function UserTable({ className = "" }) {
                                 key={user.id}
                             >
                                 <td className="px-6 py-4">{user.name}</td>
-                                <td className="px-6 py-4">{user.email}</td>
                                 <td className="px-6 py-4 flex">
                                     <Link
                                         className="bg-emerald-600 text-white py-2 px-3 rounded-lg hover:opacity-80 transition duration-150 ease-in-out focus:ring-emerald-500 focus:ring-offset-2 mx-2 uppercase"

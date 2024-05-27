@@ -79,13 +79,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        // mengambil semua data user untuk mengirim data
-        $users = User::orderBy('name', 'asc')->paginate(5);
+        $user->with('details');
 
-        // mengembalikan data user dan semua user ke view
         return Inertia::render('User/Edit', [
-            'users' => $users,
-            'user' => $user
+            'user' => $user,
+            'detail' => $user->details
         ]);
     }
 
@@ -94,19 +92,30 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // melakukan validasi untuk ubah data
         $request->validate([
             'name' => 'required|string|min:5|max:100',
-            'email' => 'required|string|email|max:100|unique:users,email,' . $user->id,
+            'email' => 'required|string|email|max:100|unique:users,email, ' . $user->id,
+            'gender' => 'required',
+            'phone' => 'required|integer|min:8',
+            'address' => 'required|string|min:10',
+            'division' => 'required|string'
         ]);
 
-        // mengubah data sesuai dari post
         $user->update([
             'name' => $request->name,
             'email' => $request->email
         ]);
 
-        return Redirect::route('users.index');
+        $detail = UserDetail::where('user_id', $user->id);
+
+        $detail->update([
+            'gender' => $request->gender,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'division' => $request->division
+        ]);
+
+        return redirect()->back();
     }
 
     /**

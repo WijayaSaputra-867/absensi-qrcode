@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -26,12 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $user = [
-            "name" => "",
-            "email" => "",
-            "password" => "",
-        ];
-        return Inertia::render('User/Create', ['user' => $user]);
+        return Inertia::render('User/Create');
     }
 
     /**
@@ -39,28 +35,35 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi untuk data user
         $request->validate([
             'name' => 'required|string|min:5|max:100',
-            'email' => 'required|string|email|unique:users,email|max:100',
-            'password' => 'required|string|min:8|confirmed'
+            'email' => 'required|string|email|max:100|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'gender' => 'required',
+            'phone' => 'required|integer|min:8',
+            'address' => 'required|string|min:10',
+            'division' => 'required|string'
         ]);
 
-        // Memasukan ke variabel user
-        $user = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'gender' => '',
-            'phone' => '',
-            'address' => '',
-            'division' => ''
-        ];
+        $new_user = new User;
+        $new_user->name = $request->name;
+        $new_user->email = $request->email;
+        $new_user->password = Hash::make($request->password);
 
-        // Mengirim ke Detail user
-        return Inertia::render('User/Detail/Create', [
-            'user' => $user,
-        ]);
+        if ($new_user->save()) {
+            $user = User::latest()->first();
+        }
+
+        UserDetail::create([
+            'user_id' => $user->id,
+            'gender' => $request->gender,
+            'qrcode' => Hash::make($request->name),
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'division' => $request->division
+        ]);;
+
+        return redirect()->back();
     }
 
     /**
@@ -91,7 +94,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // melakukan validasi untuk ubdah data
+        // melakukan validasi untuk ubah data
         $request->validate([
             'name' => 'required|string|min:5|max:100',
             'email' => 'required|string|email|max:100|unique:users,email,' . $user->id,

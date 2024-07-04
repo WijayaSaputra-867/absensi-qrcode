@@ -2,7 +2,7 @@ import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
 export default function UserAddForm() {
@@ -23,6 +23,7 @@ export default function UserAddForm() {
         phone: "",
         address: "",
         division: "",
+        shift: "",
     });
 
     const submit = (e) => {
@@ -191,6 +192,18 @@ export default function UserAddForm() {
                             className="mt-2"
                             message={errors.division}
                         />
+                    </div>
+                    {/* shift */}
+                    <div>
+                        <InputLabel htmlFor="shift" value="Shift" />
+                        <select
+                            id="shift"
+                            onChange={(e) => setData("shift", e.target.value)}
+                            className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        >
+                            <option selected>Choose a shift</option>
+                            <option value="US">United States</option>
+                        </select>
                     </div>
                     {/* button */}
                     <div className="flex justify-end gap-4">

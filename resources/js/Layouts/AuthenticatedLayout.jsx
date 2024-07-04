@@ -48,6 +48,24 @@ export default function Authenticated({ user, header, children }) {
                                     </NavLink>
                                 </div>
                             )}
+                            {user.role == "admin" && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("shifts.index")}
+                                        active={
+                                            route().current("shifts.index") ||
+                                            route().current("shifts.create") ||
+                                            route().current("shifts.show") ||
+                                            route().current("shifts.edit") ||
+                                            route().current("shifts.search")
+                                                ? true
+                                                : false
+                                        }
+                                    >
+                                        Shift
+                                    </NavLink>
+                                </div>
+                            )}
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -184,7 +202,24 @@ export default function Authenticated({ user, header, children }) {
                             </ResponsiveNavLink>
                         </div>
                     )}
-
+                    {user.role == "admin" && (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("shifts.index")}
+                                active={
+                                    route().current("shifts.index") ||
+                                    route().current("shifts.create") ||
+                                    route().current("shifts.show") ||
+                                    route().current("shifts.edit") ||
+                                    route().current("shifts.search")
+                                        ? true
+                                        : false
+                                }
+                            >
+                                Shift
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
                             <div className="font-medium text-base text-gray-800">

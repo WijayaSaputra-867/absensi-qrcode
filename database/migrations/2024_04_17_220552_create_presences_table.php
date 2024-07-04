@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('shift_id');
-            $table->enum('description', ['attend', 'absent', 'permission']);
+            $table->boolean('is_present')->default(false);
+            $table->boolean('is_late')->default(false);
+            $table->boolean('is_absent')->default(false);
+            $table->boolean('is_permission')->default(false);
             $table->timestamps();
         });
     }

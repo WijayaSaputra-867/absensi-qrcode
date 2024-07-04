@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
+            $table->foreignId('shift_id');
             $table->enum('gender', ['Male', 'Female']);
             $table->text('qrcode');
             $table->integer('phone');

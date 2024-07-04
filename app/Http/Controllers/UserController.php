@@ -43,7 +43,8 @@ class UserController extends Controller
             'gender' => 'required',
             'phone' => 'required|integer|min:8',
             'address' => 'required|string|min:10',
-            'division' => 'required|string'
+            'division' => 'required|string',
+            'shift' => 'required'
         ]);
 
         $new_user = new User;
@@ -57,6 +58,7 @@ class UserController extends Controller
 
         UserDetail::create([
             'user_id' => $user->id,
+            'shift_id' => $request->shift,
             'gender' => $request->gender,
             'qrcode' => Hash::make($request->name),
             'phone' => $request->phone,

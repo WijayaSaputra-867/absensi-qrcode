@@ -23,13 +23,13 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin'
         ]);
 
-        UserDetail::factory()->create([
-            'user_id' => 1,
-            'gender' =>'Male',
-            'qrcode' => Hash::make('M.Wijaya Saputra Manager'),
-            'phone' => 83875041369,
-            'address' => 'Depok',
-            'division' => 'Manager'
-        ]);
+        // UserDetail::factory()->create([
+        //     'user_id' => 1,
+        //     'gender' =>'Male',
+        //     'qrcode' => Hash::make('M.Wijaya Saputra Manager'),
+        //     'phone' => 83875041369,
+        //     'address' => 'Depok',
+        //     'division' => 'Manager'
+        // ]);
     }
 }

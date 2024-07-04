@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ShiftController;
 
 Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 
@@ -26,10 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile', [ProfileController::class, 'upload_image'])->name('profile.upload-image');
 
+    // route for user
     Route::resource('/users', UserController::class);
     Route::prefix('/users')->group(function () {
         Route::get('/search/{name}', [UserController::class, 'search'])->name('users.search');
     });
+    // route for shift
+    Route::resource('/shifts', ShiftController::class);
 });
 
 require __DIR__ . '/auth.php';

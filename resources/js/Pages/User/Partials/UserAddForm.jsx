@@ -37,7 +37,7 @@ export default function UserAddForm() {
                 <h2 className="text-lg font-medium text-gray-900">User Form</h2>
                 <p className="text-base text-gray-600">Create a new user</p>
             </header>
-            <form className="flex flex-row" onSubmit={submit}>
+            <form className="flex flex-col md:flex-row" onSubmit={submit}>
                 {/* flex left */}
                 <div className="space-y-6 w-full md:w-1/2 mr-4">
                     {/* name */}

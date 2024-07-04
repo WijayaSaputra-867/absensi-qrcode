@@ -14,11 +14,11 @@ export default function Index({ auth }) {
         >
             <Head title="Detail User" />
 
-            <div className="py-6 flex flex-col-reverse md:flex-row">
+            <div className="py-6">
                 <div className="w-full  mx-auto sm:px-6 lg:px-6 sm:mt-4 md:mt-0">
-                    <div className="bg-white overflow-hidden shadow-sm rounded-lg">
+                    <div className="overflow-hidden rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <UserShow className="space-y-6" />
+                            <UserShow />
                         </div>
                     </div>
                 </div>

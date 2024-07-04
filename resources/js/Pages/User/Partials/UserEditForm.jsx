@@ -5,7 +5,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import { usePage, useForm } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
-export default function UserEditForm({ className = "" }) {
+export default function UserEditForm() {
     const { user, detail } = usePage().props;
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
@@ -32,7 +32,7 @@ export default function UserEditForm({ className = "" }) {
                     Password can be changed in the user's profile
                 </p>
             </header>
-            <form className="flex flex-row" onSubmit={submit}>
+            <form className="flex flex-col md:flex-row" onSubmit={submit}>
                 {/* flex left */}
                 <div className="space-y-6 w-full md:w-1/2 mr-4">
                     {/* name */}

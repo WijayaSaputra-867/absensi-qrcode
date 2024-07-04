@@ -4,11 +4,14 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserDetailController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WelcomeController;
 
 Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
+
+Route::get('/pie', function () {
+    return Inertia::render('Test');
+});
 
 Route::get('/admin', [AdminController::class, 'create'])->name('admin.create');
 Route::post('/admin/create', [AdminController::class, 'store'])->name('admin.store');
@@ -26,11 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/users', UserController::class);
     Route::prefix('/users')->group(function () {
         Route::get('/search/{name}', [UserController::class, 'search'])->name('users.search');
-        Route::get('/create/details/{user}', [UserDetailController::class, 'create'])->name('details.create');
-        Route::post('/create/details', [UserDetailController::class, 'store'])->name('details.store');
     });
-
-
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

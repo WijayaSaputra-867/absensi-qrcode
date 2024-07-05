@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Shift;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,7 +29,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('User/Create');
+        $shifts = Shift::all();
+        return Inertia::render('User/Create', [
+            'shifts' => $shifts
+        ]);
     }
 
     /**
@@ -84,10 +88,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $user->with('details');
-
+        $shifts = Shift::all();
         return Inertia::render('User/Edit', [
             'user' => $user,
-            'detail' => $user->details
+            'detail' => $user->details,
+            'shifts' => $shifts
         ]);
     }
 

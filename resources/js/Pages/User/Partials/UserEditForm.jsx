@@ -6,7 +6,7 @@ import { usePage, useForm } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
 export default function UserEditForm() {
-    const { user, detail } = usePage().props;
+    const { user, detail, shifts } = usePage().props;
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
             name: user.name,
@@ -15,6 +15,7 @@ export default function UserEditForm() {
             phone: detail.phone,
             address: detail.address,
             division: detail.division,
+            shift: detail.shift_id,
         });
 
     const submit = (e) => {
@@ -104,10 +105,6 @@ export default function UserEditForm() {
                         </div>
                         <InputError className="mt-2" message={errors.gender} />
                     </div>
-                </div>
-                {/* end flex left */}
-                {/* flex right */}
-                <div className="space-y-6 w-full md:w-1/2">
                     {/* phone */}
                     <div>
                         <InputLabel htmlFor="phone" value="Phone Number" />
@@ -120,6 +117,10 @@ export default function UserEditForm() {
                         />
                         <InputError className="mt-2" message={errors.phone} />
                     </div>
+                </div>
+                {/* end flex left */}
+                {/* flex right */}
+                <div className="space-y-6 w-full md:w-1/2">
                     {/* address */}
                     <div>
                         <InputLabel htmlFor="address" value="Address" />
@@ -149,6 +150,27 @@ export default function UserEditForm() {
                             className="mt-2"
                             message={errors.division}
                         />
+                    </div>
+                    {/* shift */}
+                    <div>
+                        <InputLabel htmlFor="shift" value="Shift" />
+                        <select
+                            id="shift"
+                            onChange={(e) => setData("shift", e.target.value)}
+                            className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                        >
+                            <option selected>Choose a shift</option>
+                            {shifts.map((shift) => (
+                                <option
+                                    key={shift.id}
+                                    value={shift.id}
+                                    selected={data.shift === shift.id}
+                                >
+                                    {shift.shift_name} : {shift.work_time}-
+                                    {shift.home_time}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     {/* button */}
                     <div className="flex justify-end gap-4">

@@ -6,6 +6,7 @@ import { useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 
 export default function UserAddForm() {
+    const shifts = usePage().props.shifts;
     const {
         data,
         setData,
@@ -202,8 +203,17 @@ export default function UserAddForm() {
                             className="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                         >
                             <option selected>Choose a shift</option>
-                            <option value="US">United States</option>
+                            {shifts.map((shift) => (
+                                <option key={shift.id} value={shift.id}>
+                                    {shift.shift_name} : {shift.work_time}-
+                                    {shift.home_time}
+                                </option>
+                            ))}
                         </select>
+                        <InputError
+                            className="mt-2"
+                            message={errors.shift}
+                        />
                     </div>
                     {/* button */}
                     <div className="flex justify-end gap-4">

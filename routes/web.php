@@ -3,10 +3,11 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ScheduleController;
 
 Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 
@@ -22,6 +23,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // route for profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -32,8 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/users')->group(function () {
         Route::get('/search/{name}', [UserController::class, 'search'])->name('users.search');
     });
+
     // route for shift
     Route::resource('/shifts', ShiftController::class);
+
+    // route for schedule
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedule.index');
 });
 
 require __DIR__ . '/auth.php';

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Shift;
-use App\Models\UserDetail;
 use Illuminate\Http\Request;
 
 class ShiftController extends Controller
@@ -58,16 +57,7 @@ class ShiftController extends Controller
      */
     public function show(Shift $shift)
     {
-        $details = UserDetail::where("shift_id", $shift->id)->get();
-
-        $users_id = [];
-        $users = [];
-        foreach ($details as $detail) {
-            $users_id[] = $detail->user_id;
-        }
-        foreach ($users_id as $id) {
-            $users[] = User::find($id);
-        }
+        $users = User::where('shift_id', $shift->id)->get();
 
         return Inertia::render('Shift/Show', [
             'shift' => $shift,

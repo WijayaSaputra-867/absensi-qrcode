@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('shift_id')->nullable();
             $table->string('name');
             $table->string('profile')->default('/image/profiles/profile.png');
             $table->boolean('change_profile')->default(false);
-            $table->enum('role', ['admin','employee'])->default('employee');
+            $table->enum('role', ['admin', 'employee'])->default('employee');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->text('qrcode');
             $table->rememberToken();
             $table->timestamps();
         });

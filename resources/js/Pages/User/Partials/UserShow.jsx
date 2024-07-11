@@ -73,7 +73,7 @@ export default function UserShow() {
                         <p>{user.email}</p>
                         <p>{detail.phone}</p>
                     </div>
-                    <QRCode value={detail.qrcode} className="w-56 h-56" />
+                    <QRCode value={user.qrcode} className="w-56 h-56" />
                     <div>
                         <p className="leading-relaxed text-sm text-center">
                             {detail.address}

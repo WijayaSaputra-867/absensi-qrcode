@@ -52,9 +52,11 @@ class UserController extends Controller
         ]);
 
         $new_user = new User;
+        $new_user->shift_id = $request->shift;
         $new_user->name = $request->name;
         $new_user->email = $request->email;
         $new_user->password = Hash::make($request->password);
+        $new_user->qrcode = Hash::make($request->name);
 
         if ($new_user->save()) {
             $user = User::latest()->first();
@@ -62,9 +64,7 @@ class UserController extends Controller
 
         UserDetail::create([
             'user_id' => $user->id,
-            'shift_id' => $request->shift,
             'gender' => $request->gender,
-            'qrcode' => Hash::make($request->name),
             'phone' => $request->phone,
             'address' => $request->address,
             'division' => $request->division

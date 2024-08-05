@@ -74,6 +74,28 @@ export default function Authenticated({ user, header, children }) {
                                     Schedule
                                 </NavLink>
                             </div>
+                            {user.role == "admin" && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("presences.index")}
+                                        active={
+                                            route().current(
+                                                "presences.index"
+                                            ) ||
+                                            route().current(
+                                                "presences.create"
+                                            ) ||
+                                            route().current("presences.show") ||
+                                            route().current("presences.edit") ||
+                                            route().current("presences.search")
+                                                ? true
+                                                : false
+                                        }
+                                    >
+                                        Presence
+                                    </NavLink>
+                                </div>
+                            )}
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">

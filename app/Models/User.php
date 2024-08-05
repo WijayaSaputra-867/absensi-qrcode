@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -18,10 +19,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'shift_id',
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'qrcode',
     ];
 
     /**
@@ -50,5 +53,10 @@ class User extends Authenticatable
     public function details(): HasOne
     {
         return $this->hasOne(UserDetail::class);
+    }
+
+    public function presence_scans(): HasMany
+    {
+        return $this->hasMany(PresenceScan::class);
     }
 }

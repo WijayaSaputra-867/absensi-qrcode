@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('presence_scans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('shift_id');
+            $table->foreignId('user_id');
             $table->date('date');
-            $table->string('description');
+            $table->boolean('time_1')->default(false);
+            $table->boolean('time_2')->default(false);
+            $table->boolean('time_3')->default(false);
+            $table->boolean('time_4')->default(false);
             $table->timestamps();
         });
     }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('presence_scans');
     }
 };

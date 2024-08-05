@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ScheduleController;
 
 Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
@@ -40,6 +41,11 @@ Route::middleware('auth')->group(function () {
 
     // route for schedule
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedule.index');
+    Route::get('/schedules/create', [ScheduleController::class, 'create'])->name('schedule.create');
+    Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedule.store');
+
+    // route for presence
+    Route::resource('/presences', PresenceController::class);
 });
 
 require __DIR__ . '/auth.php';

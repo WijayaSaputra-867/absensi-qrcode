@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('presences', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('shift_id');
+            $table->date('date');
+            $table->date('month');
+            $table->date('year');
             $table->boolean('is_present')->default(false);
             $table->boolean('is_late')->default(false);
             $table->boolean('is_absent')->default(false);

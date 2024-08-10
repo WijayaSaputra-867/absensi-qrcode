@@ -33,7 +33,7 @@ export default function ScheduleCard() {
 
     const handleCheckboxChange = (e) => {
         const { id, checked } = e.target;
-        const shiftsArray = [...data.shifts];
+        let shiftsArray = [...data.shifts];
         if (checked) {
             shiftsArray.push(parseInt(id));
         } else {

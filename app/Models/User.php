@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -58,5 +59,20 @@ class User extends Authenticatable
     public function presence_scans(): HasMany
     {
         return $this->hasMany(PresenceScan::class);
+    }
+
+    public function shift(): BelongsTo
+    {
+        return $this->belongsTo(Shift::class, 'id', 'shift_id');
+    }
+
+    public function presences(): HasMany
+    {
+        return $this->hasMany(Presence::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin'; // or any other logic to check if the user is an admin
     }
 }

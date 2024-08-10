@@ -10,7 +10,7 @@ export default function ShiftAddForm() {
     const {
         data,
         setData,
-        post,
+        patch,
         errors,
         reset,
         processing,
@@ -25,7 +25,7 @@ export default function ShiftAddForm() {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route("shifts.update", shift));
+        patch(route("shifts.update", shift));
         reset();
     };
 

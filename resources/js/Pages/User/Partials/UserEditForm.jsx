@@ -171,6 +171,7 @@ export default function UserEditForm() {
                                 </option>
                             ))}
                         </select>
+                        <InputError className="mt-2" message={errors.shift} />
                     </div>
                     {/* button */}
                     <div className="flex justify-end gap-4">

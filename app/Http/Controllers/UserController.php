@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Shift;
 use App\Models\UserDetail;
+use App\Models\PresenceScan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -45,7 +47,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:100|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'gender' => 'required',
-            'phone' => 'required|integer|min:8',
+            'phone' => 'required|numeric|min:8',
             'address' => 'required|string|min:10',
             'division' => 'required|string',
             'shift' => 'required'
@@ -69,6 +71,10 @@ class UserController extends Controller
             'address' => $request->address,
             'division' => $request->division
         ]);;
+
+        PresenceScan::create([
+            'user_id' => $user->id,
+        ]);
 
         return redirect()->back();
     }

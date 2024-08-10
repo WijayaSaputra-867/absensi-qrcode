@@ -1,7 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import SelectPage from "./Partials/SelectPage";
-import ScanPage from "./Partials/ScanPage";
+import PresenceScanTable from "../Partials/PresenceScanTable";
 
 export default function Index({ auth }) {
     return (
@@ -15,21 +14,11 @@ export default function Index({ auth }) {
         >
             <Head title="Presence" />
 
-            <div className="py-6">
+            <div className="py-6 flex flex-col-reverse md:flex-row">
                 <div className="w-full  mx-auto sm:px-6 lg:px-6 sm:mt-4 md:mt-0">
-                    <div className="bg-white shadow-sm rounded-lg">
+                    <div className="bg-white overflow-hidden shadow-sm rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <SelectPage />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="py-6">
-                <div className="w-full  mx-auto sm:px-6 lg:px-6 sm:mt-4 md:mt-0">
-                    <div className="bg-white shadow-sm rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <ScanPage />
+                            <PresenceScanTable className="space-y-6" />
                         </div>
                     </div>
                 </div>

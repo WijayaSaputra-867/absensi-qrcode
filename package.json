@@ -24,6 +24,7 @@
         "@inertiajs/inertia-react": "^0.8.1",
         "@yudiel/react-qr-scanner": "^2.0.4",
         "chart.js": "^4.4.3",
+        "date-fns": "^3.6.0",
         "downloadjs": "^1.4.7",
         "html-react-parser": "^5.1.10",
         "html-to-image": "^1.11.11",

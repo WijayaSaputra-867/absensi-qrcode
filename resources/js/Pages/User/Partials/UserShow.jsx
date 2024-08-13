@@ -10,13 +10,13 @@ import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { FaCircle } from "react-icons/fa6";
 
 export default function UserShow() {
-    const { user, detail } = usePage().props;
+    const { user, detail, presence } = usePage().props;
 
     const data = [
-        { name: "Hadir", value: 20 },
-        { name: "Terlambat", value: 5 },
-        { name: "Izin", value: 2 },
-        { name: "Tidak Masuk", value: 3 },
+        { name: "Present", value: presence.total_present },
+        { name: "Late", value: presence.total_late },
+        { name: "Permit", value: presence.total_permission },
+        { name: "Absent", value: presence.total_absent },
     ];
 
     const COLORS = ["#14b8a6", "#0ea5e9", "#f59e0b", "#f43f5e"];
@@ -60,7 +60,7 @@ export default function UserShow() {
                     </div>
 
                     <img
-                        className="mt-3 w-24 h-24 object-cover rounded-circle"
+                        className="mt-3 w-24 h-24 object-cover rounded-full"
                         src={
                             user.change_profile == false
                                 ? user.profile
@@ -71,7 +71,7 @@ export default function UserShow() {
                     <div className="text-center text-sm">
                         <p>{detail.gender}</p>
                         <p>{user.email}</p>
-                        <p>{detail.phone}</p>
+                        <p>+62 {detail.phone}</p>
                     </div>
                     <QRCode value={user.qrcode} className="w-56 h-56" />
                     <div>
@@ -82,51 +82,67 @@ export default function UserShow() {
                 </div>
             </div>
             {/* presence card */}
-            <div className="w-full md:w-2/3 ml-3">
+            <div className="w-full md:w-2/3 md:ml-3 md:mt-0 mt-3">
                 <div className="bg-white shadow rounded-md p-4">
                     <h3 className="text-lg font-medium mb-2">
-                        Kehadiran Bulan Ini
+                        This month's attendance
                     </h3>
                     {/* data card */}
-                    <div className="flex flex-row space-x-2">
-                        <div className="rounded-lg bg-teal-500 md:w-1/4 p-3 text-white hover:opacity-85 w:1/2">
-                            <h1 className="text-2xl">Hadir</h1>
+                    <div className="flex md:flex-row flex-col md:space-x-2 md:space-y-0 space-y-2">
+                        <div className="rounded-lg bg-teal-500 md:w-1/4 md:p-4 p-2 text-white hover:opacity-85 w:1/2">
+                            <h1 className="md:text-2xl text-xl">Presence</h1>
                             <div className="flex items-center justify-around">
                                 <p className="">
-                                    <span className="text-xl"> X </span>
-                                    <span className="text-lg">Hari</span>
+                                    <span className="md:text-xl text-lg">
+                                        {presence.total_present}{" "}
+                                    </span>
+                                    <span className="md:text-lg text-base">
+                                        Days
+                                    </span>
                                 </p>
-                                <BiCalendarCheck className="text-5xl text-teal-600" />
+                                <BiCalendarCheck className="md:text-5xl text-3xl text-teal-600" />
                             </div>
                         </div>
-                        <div className="rounded-lg bg-sky-500 md:w-1/4 p-4 text-white hover:opacity-85 w:1/2">
-                            <h1 className="text-2xl">Telat</h1>
+                        <div className="rounded-lg bg-sky-500 md:w-1/4 md:p-4 p-2 text-white hover:opacity-85 w:1/2">
+                            <h1 className="md:text-2xl text-xl">Late</h1>
                             <div className="flex items-center justify-around">
                                 <p className="">
-                                    <span className="text-xl"> X </span>
-                                    <span className="text-lg">Hari</span>
+                                    <span className="md:text-xl text-lg">
+                                        {presence.total_late}{" "}
+                                    </span>
+                                    <span className="md:text-lg text-base">
+                                        Days
+                                    </span>
                                 </p>
-                                <BiCalendarMinus className="text-5xl text-sky-600" />
+                                <BiCalendarMinus className="md:text-5xl text-3xl text-sky-600" />
                             </div>
                         </div>
-                        <div className="rounded-lg bg-amber-500 md:w-1/4 p-4 text-white hover:opacity-85 w:1/2">
-                            <h1 className="text-2xl">Izin</h1>
+                        <div className="rounded-lg bg-amber-500 md:w-1/4 md:p-4 p-2 text-white hover:opacity-85 w:1/2">
+                            <h1 className="md:text-2xl text-xl">Permit</h1>
                             <div className="flex items-center justify-around">
                                 <p className="">
-                                    <span className="text-xl"> X </span>
-                                    <span className="text-lg">amber</span>
+                                    <span className="md:text-xl text-lg">
+                                        {presence.total_permission}{" "}
+                                    </span>
+                                    <span className="md:text-lg text-base">
+                                        Days
+                                    </span>
                                 </p>
-                                <BiCalendarExclamation className="text-5xl text-amber-600" />
+                                <BiCalendarExclamation className="md:text-5xl text-3xl text-amber-600" />
                             </div>
                         </div>
-                        <div className="rounded-lg bg-rose-500 md:w-1/4 p-4 text-white hover:opacity-85 w:1/2">
-                            <h1 className="text-2xl">Tidak Hadir</h1>
+                        <div className="rounded-lg bg-rose-500 md:w-1/4 md:p-4 p-2 text-white hover:opacity-85 w:1/2">
+                            <h1 className="md:text-2xl text-xl">Absent</h1>
                             <div className="flex items-center justify-around">
                                 <p className="">
-                                    <span className="text-xl"> X </span>
-                                    <span className="text-lg">Hari</span>
+                                    <span className="md:text-xl text-lg">
+                                        {presence.total_absent}{" "}
+                                    </span>
+                                    <span className="md:text-lg text-base">
+                                        Days
+                                    </span>
                                 </p>
-                                <BiCalendarX className="text-5xl text-rose-600" />
+                                <BiCalendarX className="md:text-5xl text-3xl text-rose-600" />
                             </div>
                         </div>
                     </div>
@@ -157,19 +173,19 @@ export default function UserShow() {
                         <div className="w-1/2 h-full text-lg">
                             <div className="mt-1">
                                 <FaCircle className="text-teal-500 inline" />
-                                <p className="inline mx-2">Hadir</p>
+                                <p className="inline mx-2">Present</p>
                             </div>
                             <div className="mt-1">
                                 <FaCircle className="text-sky-500 inline" />
-                                <p className="inline mx-2">Terlambat</p>
+                                <p className="inline mx-2">Late</p>
                             </div>
                             <div className="mt-1">
                                 <FaCircle className="text-amber-500 inline" />
-                                <p className="inline mx-2">Izin</p>
+                                <p className="inline mx-2">Permit</p>
                             </div>
                             <div className="mt-1">
                                 <FaCircle className="text-rose-500 inline" />
-                                <p className="inline mx-2">Tidak Masuk</p>
+                                <p className="inline mx-2">Absent</p>
                             </div>
                         </div>
                     </div>

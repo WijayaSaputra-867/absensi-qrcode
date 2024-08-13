@@ -8,21 +8,18 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 
-Route::get('/pie', function () {
-    return Inertia::render('Test');
-});
 
 Route::get('/admin', [AdminController::class, 'create'])->name('admin.create');
 Route::post('/admin/create', [AdminController::class, 'store'])->name('admin.store');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     // route for profile
@@ -30,9 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile', [ProfileController::class, 'upload_image'])->name('profile.upload-image');
+
+    // route for calendar
+    Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
 });
 
-Route::middleware([AdminMiddleware::class, 'role:admin'])->group(function () {
+Route::middleware(AdminMiddleware::class)->group(function () {
 
     // route for user
     Route::resource('/users', UserController::class);

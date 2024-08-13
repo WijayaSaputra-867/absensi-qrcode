@@ -19,7 +19,7 @@ class AdminMiddleware
 
 
         if (Auth::check() && !$request->user()->isAdmin()) {
-            if (!in_array($request->route()->uri(), ['dashboard', 'profile', 'logout', 'login', '/'])) {
+            if (!in_array($request->route()->uri(), ['dashboard', 'profile', 'calendar', 'logout', 'login', '/'])) {
                 abort(403, "you don't have access to this page");
             }
         }

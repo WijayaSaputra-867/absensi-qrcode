@@ -2,11 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useForm, usePage } from "@inertiajs/react";
+import { isWithinInterval } from "date-fns";
 
 export default function Scanner() {
     const { result } = usePage().props;
-    const [timeNow, setTimeNow] = useState(new Date().getHours());
+    const [currentTime, setCurrentTime] = useState(new Date());
     const [classDisable, setClassDisable] = useState("");
+    const [startTime, setStartTime] = useState(""); // set start time from variable
+    const [endTime, setEndTime] = useState(""); // set end time from variable
+    const [scanner, setScanner] = useState(null);
 
     const { data, setData, post } = useForm({
         scannedText: "",
@@ -15,9 +19,11 @@ export default function Scanner() {
     useEffect(() => {
         const scanner = new Html5QrcodeScanner(
             "reader",
-            { fps: 10, qrbox: 250 },
+            { fps: 5, qrbox: 250 },
             /* verbose= */ false
         );
+
+        // setScanner(scanner);
 
         const onScanSuccess = (decodedText) => {
             setData("scannedText", decodedText);
@@ -36,10 +42,34 @@ export default function Scanner() {
     }, [setData]);
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setTimeNow(new Date().getHours());
-        }, 1000); // update jam setiap 1 detik
+        if (!Object.keys(result).length === 0) {
+            setStartTime(result.start);
+            setEndTime(result.end);
+        }
+    }, [setStartTime, setEndTime]);
 
+    const timeRange = () => {
+        const start = new Date();
+        start.setHours(parseInt(startTime.split(":")[0]));
+        start.setMinutes(parseInt(startTime.split(":")[1]));
+        const end = new Date();
+        end.setHours(parseInt(endTime.split(":")[0]));
+        end.setMinutes(parseInt(endTime.split(":")[1]));
+        return isWithinInterval(currentTime, { start, end });
+    };
+
+    useEffect(() => {
+        if (timeRange()) {
+            setClassDisable("");
+        } else {
+            setClassDisable("opacity-50 cursor-not-allowed");
+        }
+    });
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000); // update every 1 second
         return () => clearInterval(intervalId);
     }, []);
 
@@ -49,28 +79,12 @@ export default function Scanner() {
         }
     }, [data, post]);
 
-    useEffect(() => {
-        if (result === "") {
-            setClassDisable(
-                "pointer-events-none cursor-not-allowed opacity-50"
-            );
-        } else {
-            if (result.start >= timeNow && result.end <= timeNow) {
-                setClassDisable("");
-            } else {
-                setClassDisable(
-                    "pointer-events-none cursor-not-allowed opacity-50"
-                );
-            }
-        }
-    });
-
     return (
         <div className="flex justify-center mt-10">
             <div
                 id="reader"
                 style={{ width: "500px" }}
-                className={classDisable}
+                // className={classDisable}
             ></div>
             <input type="hidden" name="scannedText" value={data.scannedText} />
         </div>

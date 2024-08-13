@@ -165,10 +165,10 @@ class PresenceController extends Controller
     public function scans()
     {
         $shifts = Shift::all();
-        $hour = Carbon::now()->format('H');
-        $currentHour = Carbon::createFromTime($hour, 00)->format('H:i');
+        $currentHour = Carbon::now()->format('H:i');
         $result = [];
         $index = 0;
+        $timeRange = [];
 
         foreach ($shifts as $shift) {
             $workTimeRange[$index] = [
@@ -193,30 +193,31 @@ class PresenceController extends Controller
             $index++;
         }
 
-        // dd($workTimeRange);
+        // dd($workTimeRange, $breakStartTimeRange, $breakEndTimeRange, $homeTimeRange);
+
         foreach ($workTimeRange as $workTime) {
-            if (Carbon::createFromFormat('H:i', $workTime['start'])->addMinutes(30)->format('H:i') == $currentHour) {
+            if ($currentHour >= $workTime['start'] && $currentHour <= $workTime['end']) {
                 $result['start'] = $workTime['start'];
                 $result['end'] = $workTime['end'];
             }
         }
 
-        foreach ($breakStartTimeRange as $breakTime) {
-            if (Carbon::createFromFormat('H:i', $breakTime['start'])->addMinutes(30)->format('H:i') == $currentHour) {
-                $result['start'] = $breakTime['start'];
-                $result['end'] = $breakTime['end'];
+        foreach ($breakStartTimeRange as $breakStartTime) {
+            if ($currentHour >= $breakStartTime['start'] && $currentHour <= $breakStartTime['end']) {
+                $result['start'] = $breakStartTime['start'];
+                $result['end'] = $breakStartTime['end'];
             }
         }
 
-        foreach ($breakEndTimeRange as $breakTime) {
-            if (Carbon::createFromFormat('H:i', $breakTime['start'])->addMinutes(30)->format('H:i') == $currentHour) {
-                $result['start'] = $breakTime['start'];
-                $result['end'] = $breakTime['end'];
+        foreach ($breakEndTimeRange as $breakEndTime) {
+            if ($currentHour >= $breakEndTime['start'] && $currentHour <= $breakEndTime['end']) {
+                $result['start'] = $breakEndTime['start'];
+                $result['end'] = $breakEndTime['end'];
             }
         }
 
         foreach ($homeTimeRange as $homeTime) {
-            if (Carbon::createFromFormat('H:i', $homeTime['start'])->addMinutes(30)->format('H:i') == $currentHour) {
+            if ($currentHour >= $homeTime['start'] && $currentHour <= $homeTime['end']) {
                 $result['start'] = $homeTime['start'];
                 $result['end'] = $homeTime['end'];
             }

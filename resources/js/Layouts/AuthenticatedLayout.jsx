@@ -29,6 +29,16 @@ export default function Authenticated({ user, header, children }) {
                                     Dashboard
                                 </NavLink>
                             </div>
+                            {user.role != "admin" && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("calendar")}
+                                        active={route().current("calendar")}
+                                    >
+                                        Calendar
+                                    </NavLink>
+                                </div>
+                            )}
                             {/* User Link */}
                             {user.role == "admin" && (
                                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -66,14 +76,18 @@ export default function Authenticated({ user, header, children }) {
                                     </NavLink>
                                 </div>
                             )}
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("schedule.index")}
-                                    active={route().current("schedule.index")}
-                                >
-                                    Schedule
-                                </NavLink>
-                            </div>
+                            {user.role == "admin" && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("schedule.index")}
+                                        active={route().current(
+                                            "schedule.index"
+                                        )}
+                                    >
+                                        Schedule
+                                    </NavLink>
+                                </div>
+                            )}
                             {user.role == "admin" && (
                                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                     <NavLink
@@ -214,6 +228,14 @@ export default function Authenticated({ user, header, children }) {
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
+                    {user.role != "admin" && (
+                        <ResponsiveNavLink
+                            href={route("calendar")}
+                            active={route().current("calendar")}
+                        >
+                            Calendar
+                        </ResponsiveNavLink>
+                    )}
                     {user.role == "admin" && (
                         <div className="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink
@@ -250,14 +272,16 @@ export default function Authenticated({ user, header, children }) {
                             </ResponsiveNavLink>
                         </div>
                     )}
-                    <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink
-                            href={route("schedule.index")}
-                            active={route().current("schedule.index")}
-                        >
-                            Schedule
-                        </ResponsiveNavLink>
-                    </div>
+                    {user.role == "admin" && (
+                        <div className="pt-2 pb-3 space-y-1">
+                            <ResponsiveNavLink
+                                href={route("schedule.index")}
+                                active={route().current("schedule.index")}
+                            >
+                                Schedule
+                            </ResponsiveNavLink>
+                        </div>
+                    )}
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
                             <div className="font-medium text-base text-gray-800">

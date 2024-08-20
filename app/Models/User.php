@@ -63,7 +63,7 @@ class User extends Authenticatable
 
     public function shift(): BelongsTo
     {
-        return $this->belongsTo(Shift::class, 'id', 'shift_id');
+        return $this->belongsTo(Shift::class);
     }
 
     public function presences(): HasMany

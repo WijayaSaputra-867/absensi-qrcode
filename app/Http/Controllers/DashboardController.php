@@ -30,6 +30,13 @@ class DashboardController extends Controller
             )
             ->first();
 
+        if ($presence == null) {
+            $presence['total_present'] = 0;
+            $presence['total_absent'] = 0;
+            $presence['total_permission'] = 0;
+            $presence['total_late'] = 0;
+        }
+
         // dd($presence->total_present);
 
 

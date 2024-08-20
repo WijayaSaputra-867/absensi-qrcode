@@ -1,37 +1,50 @@
-import { Html5QrcodeScanner } from "html5-qrcode";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react ";
+import { Scanner } from "@yudiel/react-qr-scanner";
+import { usePage } from "@inertiajs/inertia-react";
 
-export default function Scanner() {
-    const [scanResult, setScanResult] = useState(null);
+const App = () => {
+    const { start_time, end_time } = usePage().props;
+    const [scanning, setScanning] = useState(false);
+    const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
-        const scanner = new Html5QrcodeScanner("reader", {
-            qrbox: {
-                width: 250,
-                height: 250,
-            },
-            fps: 5,
-        });
+        const intervalId = setInterval(() => {
+            const currentTime = new Date();
+            setCurrentTime(currentTime);
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const startTime = start_time.split(":");
+            const endTime = end_time.split(":");
+            if (
+                hours === parseInt(startTime[0]) &&
+                minutes >= parseInt(startTime[1])
+            ) {
+                setScanning(true);
+            } else if (
+                hours === parseInt(endTime[0]) &&
+                minutes < parseInt(endTime[1])
+            ) {
+                setScanning(true);
+            } else {
+                setScanning(false);
+            }
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, [start_time, end_time]);
 
-        scanner.render(success, error);
-
-        function success(result) {
-            scanner.clear();
-            setScanResult(result);
-        }
-
-        function error(err) {
-            console.warn(err);
-        }
-    }, []);
+    const handleScan = (detectedCodes) => {
+        console.log(detectedCodes);
+    };
 
     return (
-        <div className="px-auto">
-            {scanResult ? (
-                <div>{scanResult}</div>
+        <div>
+            {scanning ? (
+                <Scanner onScan={handleScan} />
             ) : (
-                <div id="reader" className="w-[600px]"></div>
+                <p>Scanning is not available at this time.</p>
             )}
         </div>
     );
-}
+};
+
+export default App;

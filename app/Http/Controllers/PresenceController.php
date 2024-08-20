@@ -10,9 +10,12 @@ use App\Models\Presence;
 use App\Models\PresenceScan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Traits\Time;
+use Hamcrest\Arrays\IsArray;
 
 class PresenceController extends Controller
 {
+    use Time;
     /**
      * Display a listing of the resource.
      */
@@ -164,69 +167,9 @@ class PresenceController extends Controller
 
     public function scans()
     {
-        $shifts = Shift::all();
-        $currentHour = Carbon::now()->format('H:i');
-        $result = [];
-        $index = 0;
-        $timeRange = [];
-
-        foreach ($shifts as $shift) {
-            $workTimeRange[$index] = [
-                'start' => Carbon::createFromFormat('H:i', $shift->work_time)->subMinutes(30)->format('H:i'),
-                'end' => Carbon::createFromFormat('H:i', $shift->work_time)->addMinutes(30)->format('H:i'),
-            ];
-
-            $breakStartTimeRange[$index] = [
-                'start' => Carbon::createFromFormat('H:i', $shift->break_start)->subMinutes(30)->format('H:i'),
-                'end' => Carbon::createFromFormat('H:i', $shift->break_start)->addMinutes(30)->format('H:i'),
-            ];
-
-            $breakEndTimeRange[$index] = [
-                'start' => Carbon::createFromFormat('H:i', $shift->break_end)->subMinutes(30)->format('H:i'),
-                'end' => Carbon::createFromFormat('H:i', $shift->break_end)->addMinutes(30)->format('H:i'),
-            ];
-
-            $homeTimeRange[$index] = [
-                'start' => Carbon::createFromFormat('H:i', $shift->home_time)->subMinutes(30)->format('H:i'),
-                'end' => Carbon::createFromFormat('H:i', $shift->home_time)->addMinutes(30)->format('H:i'),
-            ];
-            $index++;
-        }
-
-        // dd($workTimeRange, $breakStartTimeRange, $breakEndTimeRange, $homeTimeRange);
-
-        foreach ($workTimeRange as $workTime) {
-            if ($currentHour >= $workTime['start'] && $currentHour <= $workTime['end']) {
-                $result['start'] = $workTime['start'];
-                $result['end'] = $workTime['end'];
-            }
-        }
-
-        foreach ($breakStartTimeRange as $breakStartTime) {
-            if ($currentHour >= $breakStartTime['start'] && $currentHour <= $breakStartTime['end']) {
-                $result['start'] = $breakStartTime['start'];
-                $result['end'] = $breakStartTime['end'];
-            }
-        }
-
-        foreach ($breakEndTimeRange as $breakEndTime) {
-            if ($currentHour >= $breakEndTime['start'] && $currentHour <= $breakEndTime['end']) {
-                $result['start'] = $breakEndTime['start'];
-                $result['end'] = $breakEndTime['end'];
-            }
-        }
-
-        foreach ($homeTimeRange as $homeTime) {
-            if ($currentHour >= $homeTime['start'] && $currentHour <= $homeTime['end']) {
-                $result['start'] = $homeTime['start'];
-                $result['end'] = $homeTime['end'];
-            }
-        }
-
-        // dd($result);
-
+        // dd($this->timeRange());
         return Inertia::render('Presence/Scan/Scanner', [
-            'result' => $result
+            'result' => $this->timeRange()
         ]);
     }
 
@@ -240,45 +183,35 @@ class PresenceController extends Controller
 
     public function scans_store(Request $request)
     {
-        $user = User::where('qrcode', $request->input('scannedText'))->first();
-        $hour = Carbon::now()->format('H');
-        $time = Carbon::createFromTime($hour, 00)->format('H:i');
-        $shifts = Shift::all();
-        $shift_id = 0;
-        $work = 0;
-        $break_start = 0;
-        $break_end = 0;
-        $home = 0;
+        // dd($request);
+        $result =  $this->checkShift($request->input('qr_code'));
+        // dd($result);
+        if (!is_array($result)) {
+            return redirect()->back()->with('error', $result);
+        }
+        $presenceScan = PresenceScan::where('user_id', $result['user_id'])->first();
+        $newLate = $presenceScan->late + 1;
 
-        // dd($time);
-        foreach ($shifts as $shift) {
-            if ($shift->work_time == $time) {
-                $shift_id = $shift->id;
-                $work = 1;
-            } else if ($shift->break_start == $time) {
-                $shift_id = $shift->id;
-                $break_start = 1;
-            } else if ($shift->break_end == $time) {
-                $shift_id = $shift->id;
-                $break_end = 1;
-            } else if ($shift->home_time == $time) {
-                $shift_id = $shift->id;
-                $home = 1;
-            }
+        if ($result['work_time'] == 1) {
+            $presenceScan->time_1 = $result['work_time'];
+        }
+        if ($result['break_start'] == 1) {
+            $presenceScan->time_2 = $result['break_start'];
+        }
+        if ($result['break_end'] == 1) {
+            $presenceScan->time_3 = $result['break_end'];
+        }
+        if ($result['home_time'] == 1) {
+            $presenceScan->time_4 = $result['home_time'];
+        }
+        if ($result['late'] == 1) {
+            $presenceScan->late = $newLate;
         }
 
-        if ($user->shift_id == $shift_id) {
-            $scan = PresenceScan::where('user_id', $user->id)->first();
-            $scan->update([
-                'time_1' => $work,
-                'time_2' => $break_start,
-                'time_3' => $break_end,
-                'time_4' => $home
-            ]);
+        if ($presenceScan->save()) {
+            return redirect()->back()->with('success', 'Successful Absences');
         } else {
-            return redirect()->back();
+            return redirect()->back()->with('error', 'Failed Absences');
         }
-
-        return redirect()->back();
     }
 }

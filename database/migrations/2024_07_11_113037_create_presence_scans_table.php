@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('presence_scans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->boolean('permit')->default(false);
+            $table->integer('late')->default(0);
             $table->boolean('time_1')->default(false);
             $table->boolean('time_2')->default(false);
             $table->boolean('time_3')->default(false);

@@ -14,6 +14,7 @@ class AdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+<<<<<<< HEAD
     public function handle(Request $request, Closure $next): Response
     {
 
@@ -27,6 +28,14 @@ class AdminMiddleware
 
 
 
+=======
+    public function handle(Request $request, Closure $next, $role): Response
+    {
+        if (!Auth::check() || Auth::user()->role !== $role) {
+            abort(403, "You don't have access to this page");
+        }
+
+>>>>>>> 7764e16 (Memperbaiki error saat membuat admin dan menambahkan beberapa fitur middleware)
         return $next($request);
     }
 }

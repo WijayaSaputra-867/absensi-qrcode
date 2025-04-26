@@ -21,11 +21,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-<<<<<<< HEAD
-            $table->text('qrcode');
-=======
             $table->text('qrcode')->nullable();
->>>>>>> 7764e16 (Memperbaiki error saat membuat admin dan menambahkan beberapa fitur middleware)
             $table->rememberToken();
             $table->timestamps();
         });

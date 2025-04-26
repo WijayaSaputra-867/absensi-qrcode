@@ -32,34 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
 });
 
-<<<<<<< HEAD
-Route::middleware(AdminMiddleware::class)->group(function () {
-
-    // route for user
-    Route::resource('/users', UserController::class);
-    Route::prefix('/users')->group(function () {
-        Route::get('/search/{name}', [UserController::class, 'search'])->name('users.search');
-    });
-=======
 Route::middleware(['auth', 'role:admin'])->group(function () {
->>>>>>> 7764e16 (Memperbaiki error saat membuat admin dan menambahkan beberapa fitur middleware)
 
     // route for shift
     Route::resource('/shifts', ShiftController::class);
 
-<<<<<<< HEAD
-    // route for schedule
-    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedule.index');
-    Route::get('/schedules/create', [ScheduleController::class, 'create'])->name('schedule.create');
-    Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedule.store');
-
-    // route for presence
-    Route::resource('/presences', PresenceController::class);
-    Route::prefix('/presence')->group(function () {
-        Route::get('/month', [PresenceController::class, 'month'])->name('presences.month');
-        Route::get('/year', [PresenceController::class, 'month'])->name('presences.year');
-        Route::get('/scan', [PresenceController::class, 'scans_index'])->name('scans.index');
-=======
     // middleware for check shift
     Route::middleware(['shift'])->group(function () {
         // route for user
@@ -80,7 +57,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             Route::get('/year', [PresenceController::class, 'month'])->name('presences.year');
             Route::get('/scan', [PresenceController::class, 'scans_index'])->name('scans.index');
         });
->>>>>>> 7764e16 (Memperbaiki error saat membuat admin dan menambahkan beberapa fitur middleware)
     });
 });
 
